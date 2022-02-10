@@ -26,7 +26,7 @@ def pointingdynamics_data(user, distance, width, direction,
     :param manual_reactiontime_cutoff: whether reaction times should be removed from reference user trajectory [bool]
     :param shift_target_to_origin: whether to shift coordinate system such that target center is in origin [bool]
     :param analysis_dim: how many dimensions of user data trajectories should be used for mean computation etc. (e.g., 2 means position and velocity only) [1-3]
-    :param dir_path: local path to Mueller's PointingDynamicsDataset [str]
+    :param dir_path: local path to Mueller's PointingDynamicsDataset (only used if "dir_path.txt" does not exist) [str]
     :param DATAtrials: trial info object (if not provided, this is loaded from trial_info_path) [pandas.DataFrame]
     :param trial_info_path: path to trial info object (if file does not exist, DATAtrials object is re-computed and stored to file) [str]
     :return:
@@ -43,7 +43,7 @@ def pointingdynamics_data(user, distance, width, direction,
     # 1. Read dataset and meta information
     # Provide local path to Mueller's PointingDynamicsDataset
     # (http://joergmueller.info/controlpointing/PointingDynamicsDataset.zip)
-    if os.path.isfile("dir_path.txt"):
+    if os.path.isfile("dir_path.txt"):  # if dir_path has been stored from a previous run, use this
         with open("dir_path.txt", "r") as file:
             dir_path = file.read()
         dir_path = os.path.abspath(dir_path)
@@ -66,8 +66,8 @@ def pointingdynamics_data(user, distance, width, direction,
                 dir_path = input("Insert the path to the PointingDynamicsDataset directory: ")
                 dir_path = os.path.abspath(dir_path)
                 assert os.path.exists(dir_path), "ERROR: Invalid input path."
-    
-            with open("dir_path.txt", "w") as file:
+
+            with open("dir_path.txt", "w") as file:  # remember dir_path for later runs
                 file.write(dir_path)
 
     dim = 1  # dimension of the task (1D, 2D, or 3D)
@@ -211,7 +211,7 @@ def secondorderlag_eq_pointingdynamics(user, distance, width, direction, secondo
     :param manual_reactiontime_cutoff: whether reaction times should be removed from reference user trajectory [bool]
     :param shift_target_to_origin: whether to shift coordinate system such that target center is in origin [bool]
     :param analysis_dim: how many dimensions of user data trajectories should be used for mean computation etc. (e.g., 2 means position and velocity only) [1-2]
-    :param dir_path: local path to Mueller's PointingDynamicsDataset [str]
+    :param dir_path: local path to Mueller's PointingDynamicsDataset (only used if "dir_path.txt" does not exist) [str]
     :param DATAtrials: trial info object (if not provided, this is loaded from trial_info_path) [pandas.DataFrame]
     :param trial_info_path: path to trial info object (if file does not exist, DATAtrials object is re-computed and stored to file) [str]
     :return:
@@ -266,7 +266,7 @@ def minjerk_pointingdynamics(user, distance, width, direction, minjerk_param_dic
     :param manual_reactiontime_cutoff: whether reaction times should be removed from reference user trajectory [bool]
     :param shift_target_to_origin: whether to shift coordinate system such that target center is in origin [bool]
     :param analysis_dim: how many dimensions of user data trajectories should be used for mean computation etc. (e.g., 2 means position and velocity only) [1-3]
-    :param dir_path: local path to Mueller's PointingDynamicsDataset [str]
+    :param dir_path: local path to Mueller's PointingDynamicsDataset (only used if "dir_path.txt" does not exist) [str]
     :param DATAtrials: trial info object (if not provided, this is loaded from trial_info_path) [pandas.DataFrame]
     :param trial_info_path: path to trial info object (if file does not exist, DATAtrials object is re-computed and stored to file) [str]
     :return:
@@ -318,7 +318,7 @@ def lqr_pointingdynamics(user, distance, width, direction, lqr_param_dict,
     :param manual_reactiontime_cutoff: whether reaction times should be removed from reference user trajectory [bool]
     :param shift_target_to_origin: whether to shift coordinate system such that target center is in origin [bool]
     :param analysis_dim: how many dimensions of user data trajectories should be used for mean computation etc. (e.g., 2 means position and velocity only) [1-3]
-    :param dir_path: local path to Mueller's PointingDynamicsDataset [str]
+    :param dir_path: local path to Mueller's PointingDynamicsDataset (only used if "dir_path.txt" does not exist) [str]
     :param DATAtrials: trial info object (if not provided, this is loaded from trial_info_path) [pandas.DataFrame]
     :param trial_info_path: path to trial info object (if file does not exist, DATAtrials object is re-computed and stored to file) [str]
     :return:
@@ -385,7 +385,7 @@ def lqg_pointingdynamics(user, distance, width, direction, lqg_param_dict,
     (only usable for LQG; default: False) [bool]
     :param include_proprioceptive_endeffector_signals: whether end-effector can be observed position in absolute coordinates
     (only usable for E-LQG; default: False) [bool]
-    :param dir_path: local path to Mueller's PointingDynamicsDataset [str]
+    :param dir_path: local path to Mueller's PointingDynamicsDataset (only used if "dir_path.txt" does not exist) [str]
     :param DATAtrials: trial info object (if not provided, this is loaded from trial_info_path) [pandas.DataFrame]
     :param trial_info_path: path to trial info object (if file does not exist, DATAtrials object is re-computed and stored to file) [str]
     :return:
@@ -2021,7 +2021,7 @@ def paramfitting(user, distance, width, direction,
     the optimal observation problem is solved alternately (if "J_eps" is set, early termination is possible) [int]
     :param J_eps: if relative improvement of cost function falls below "J_eps" and "min_algorithm_iterations" is reached,
     iterative solving algorithm terminates [float]
-    :param dir_path: local path to Mueller's PointingDynamicsDataset [str]
+    :param dir_path: local path to Mueller's PointingDynamicsDataset (only used if "dir_path.txt" does not exist) [str]
     :param DATAtrials: trial info object (if not provided, this is loaded from trial_info_path) [pandas.DataFrame]
     :param trial_info_path: path to trial info object (if file does not exist, DATAtrials object is re-computed and stored to file) [str]
     :return: optimization result object [scipy.optimize.OptimizeResult]
