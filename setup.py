@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='ofc4hci',
-      version='0.0.1',
+      version='0.1.0',
       author='Florian Fischer',
       author_email='florian.j.fischer@uni-bayreuth.de',
       url='https://github.com/fl0fischer/OFC4HCI',
