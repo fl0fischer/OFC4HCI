@@ -43,24 +43,32 @@ def pointingdynamics_data(user, distance, width, direction,
     # 1. Read dataset and meta information
     # Provide local path to Mueller's PointingDynamicsDataset
     # (http://joergmueller.info/controlpointing/PointingDynamicsDataset.zip)
-    dir_path = os.path.abspath(dir_path)
-    if not os.path.exists(dir_path):
-        download_PointingDynamicsDataset = input("Could not find reference to PointingDynamicsDataset. Do you want to download it (~1.4GB)? (y/N) ")
-        if download_PointingDynamicsDataset.lower().startswith("y"):
-            print("Will download and unzip it to 'PointingDynamicsDataset/'.")
-            print("Downloading archive... ", end='', flush=True)
-            resp = urlopen("http://joergmueller.info/controlpointing/PointingDynamicsDataset.zip")
-            zipfile = ZipFile(BytesIO(resp.read()))
-            print("unzip archive... ", end='', flush=True)
-            for file in zipfile.namelist():
-                zipfile.extract(file)
-            print("done.")
-            dir_path = os.path.abspath("PointingDynamicsDataset")
-            assert os.path.exists(dir_path), "Internal Error during unpacking of PointingDynamicsDataset."
-        else:
-            dir_path = input("Insert the path to the PointingDynamicsDataset directory: ")
-            dir_path = os.path.abspath(dir_path)
-            assert os.path.exists(dir_path), "ERROR: Invalid input path."
+    if os.path.isfile("dir_path.txt"):
+        with open("dir_path.txt", "r") as file:
+            dir_path = file.read()
+        dir_path = os.path.abspath(dir_path)
+    else:
+        dir_path = os.path.abspath(dir_path)
+        if not os.path.exists(dir_path):
+            download_PointingDynamicsDataset = input("Could not find reference to PointingDynamicsDataset. Do you want to download it (~1.4GB)? (y/N) ")
+            if download_PointingDynamicsDataset.lower().startswith("y"):
+                print("Will download and unzip it to 'PointingDynamicsDataset/'.")
+                print("Downloading archive... ", end='', flush=True)
+                resp = urlopen("http://joergmueller.info/controlpointing/PointingDynamicsDataset.zip")
+                zipfile = ZipFile(BytesIO(resp.read()))
+                print("unzip archive... ", end='', flush=True)
+                for file in zipfile.namelist():
+                    zipfile.extract(file)
+                print("done.")
+                dir_path = os.path.abspath("PointingDynamicsDataset")
+                assert os.path.exists(dir_path), "Internal Error during unpacking of PointingDynamicsDataset."
+            else:
+                dir_path = input("Insert the path to the PointingDynamicsDataset directory: ")
+                dir_path = os.path.abspath(dir_path)
+                assert os.path.exists(dir_path), "ERROR: Invalid input path."
+    
+            with open("dir_path.txt", "w") as file:
+                file.write(dir_path)
 
     dim = 1  # dimension of the task (1D, 2D, or 3D)
 
@@ -75,7 +83,10 @@ def pointingdynamics_data(user, distance, width, direction,
             with open('PD-Dataset.pickle', 'wb') as handle:
                 pickle.dump(DATAtrials, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    filenameread = f"{dir_path}/P{user}/Data0,-1,{distance},{width}.csv"
+    filenameread = os.path.join(dir_path,f"P{user}",f"Data0,-1,{distance},{width}.csv")
+    
+    assert os.path.isfile(filenameread), "Pointing data could not be found at given path. Make sure that 'dir_path.txt' in the project's main folder contains the correct path or delete the file."
+    
     DATA = pd.read_csv(filenameread)
     dt = np.mean(np.diff(DATA.time))  # DATA time step duration
 
