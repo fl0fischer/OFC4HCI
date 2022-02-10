@@ -1,7 +1,7 @@
 # OFC4HCI
-OFC4HCI – Code for ToCHI paper "Optimal Feedback Control for Modeling Human-Computer Interaction"
+OFC4HCI – Code for paper "Optimal Feedback Control for Modeling Human-Computer Interaction" submitted to ToCHI
 
-<large>**This python toolbox includes all OFC methods described in the ToCHI paper "Optimal Feedback Control for Modeling Human-Computer Interaction" (2OL-Eq, MinJerk, LQR, LQG, and E-LQG).**</large>
+<large>**This python toolbox includes all OFC methods described in the paper "Optimal Feedback Control for Modeling Human-Computer Interaction" (2OL-Eq, MinJerk, LQR, LQG, and E-LQG).**</large>
 
 **Usage:**
 There are mainly three use cases this library is designed for:
