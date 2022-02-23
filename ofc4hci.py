@@ -748,10 +748,10 @@ def lqg(N, dt, x0_mean, u0, Sigma0, dim, num_targets,
     :param sigma_c: constant (i.e., signal-independent) control noise level [float]
     :param sigma_s: observation noise scaling parameter (only used for LQG) [float]
     :param sigma_H: proprioceptive position noise level (only used for E-LQG, only used if "include_proprioceptive_endeffector_signals==True") [float]
-    :param sigma_Hdot: visual velocity noise level [sigma_v in paper] (only used for E-LQG) [float]
-    :param sigma_frc: visual force noise level [sigma_f in paper] (only used for E-LQG) [float]
+    :param sigma_Hdot: velocity perception noise level [sigma_v in paper] (only used for E-LQG) [float]
+    :param sigma_frc: force perception noise level [sigma_f in paper] (only used for E-LQG) [float]
     :param sigma_e: gaze noise level (only used for E-LQG) [float]
-    :param gamma: visual position noise weight (only used for E-LQG) [float]
+    :param gamma: position perception noise weight (only used for E-LQG) [float]
     :param passage_times: array of indices that correspond to target passing times in via-point tasks;
     at these time steps, distance, velocity, and force costs are applied [num_targets-array]
     :param saccade_times: array of indices that correspond to saccade times [see n_s in paper] (only used for E-LQG) [num_targets-array]
@@ -913,10 +913,10 @@ def lqg_initialization(N, dt, dim,
     :param sigma_c: constant (i.e., signal-independent) control noise level [float]
     :param sigma_s: observation noise scaling parameter (only used for LQG) [float]
     :param sigma_H: proprioceptive position noise level (only used for E-LQG, only used if "include_proprioceptive_endeffector_signals==True") [float]
-    :param sigma_Hdot: visual velocity noise level [sigma_v in paper] (only used for E-LQG) [float]
-    :param sigma_frc: visual force noise level [sigma_f in paper] (only used for E-LQG) [float]
+    :param sigma_Hdot: velocity perception noise level [sigma_v in paper] (only used for E-LQG) [float]
+    :param sigma_frc: force perception noise level [sigma_f in paper] (only used for E-LQG) [float]
     :param sigma_e: gaze noise level (only used for E-LQG) [float]
-    :param gamma: visual position noise weight (only used for E-LQG) [float]
+    :param gamma: position perception noise weight (only used for E-LQG) [float]
     :param passage_times: array of indices that correspond to target passing times in via-point tasks;
     at these time steps, distance, velocity, and force costs are applied [num_targets-array]
     :param saccade_times: array of indices that correspond to saccade times [see n_s in paper] (only used for E-LQG) [num_targets-array]
@@ -937,7 +937,7 @@ def lqg_initialization(N, dt, dim,
         - passage_times: see above (might be set to default values if initially None)
         - saccade_times: see above (might be set to default values if initially None)
     """
-    # INFO: for E-LQG, proprioceptive noise (defined by sigma_H, sigma_e) should be much larger than visual noise (defined by gamma) (following Todorov1998, p.55)
+    # INFO: for E-LQG, proprioceptive noise (defined by sigma_H, sigma_e) should be much larger than visual noise (e.g., defined by gamma) (following Todorov1998, p.55)
 
     if passage_times is None:
         passage_times = np.linspace(0, N, num_targets).astype(int) if num_targets > 1 \
@@ -1397,7 +1397,7 @@ def lqg_solve_control_problem_jerkpenalization(N, dim, num_targets, gamma, sacca
     :param N: number of time steps (excluding final step) [int]
     :param dim: dimension of the task (1D, 2D, or 3D) [int]
     :param num_targets: number of targets [if system_dynamics=="E-LQG": including initial position] (can be used for via-point tasks) [int]
-    :param gamma: visual position noise weight (only used for E-LQG) [float]
+    :param gamma: position perception noise weight (only used for E-LQG) [float]
     :param saccade_times: array of indices that correspond to saccade times [see n_s in paper] (only used for E-LQG) [num_targets-array]
     :param system_dynamics: which dynamics to use ["LQG" or "E-LQG"]
     :param m: dimension of information vector [int]
@@ -1483,7 +1483,7 @@ def lqg_solve_control_problem(N, dim, num_targets, gamma, saccade_times, system_
     :param N: number of time steps (excluding final step) [int]
     :param dim: dimension of the task (1D, 2D, or 3D) [int]
     :param num_targets: number of targets [if system_dynamics=="E-LQG": including initial position] (can be used for via-point tasks) [int]
-    :param gamma: visual position noise weight (only used for E-LQG) [float]
+    :param gamma: position perception noise weight (only used for E-LQG) [float]
     :param saccade_times: array of indices that correspond to saccade times [see n_s in paper] (only used for E-LQG) [num_targets-array]
     :param system_dynamics: which dynamics to use ["LQG" or "E-LQG"]
     :param m: dimension of information vector [int]
@@ -1577,7 +1577,7 @@ def lqg_solve_observation_problem(N, dim, num_targets, gamma, saccade_times, sys
     :param N: number of time steps (excluding final step) [int]
     :param dim: dimension of the task (1D, 2D, or 3D) [int]
     :param num_targets: number of targets [if system_dynamics=="E-LQG": including initial position] (can be used for via-point tasks) [int]
-    :param gamma: visual position noise weight (only used for E-LQG) [float]
+    :param gamma: position perception noise weight (only used for E-LQG) [float]
     :param saccade_times: array of indices that correspond to saccade times [see n_s in paper] (only used for E-LQG) [num_targets-array]
     :param system_matrices: tuple of relevant system matrices (see definition below) that only need to be computed once at the beginning [tuple]
     :param initial_state_matrices: tuple of initial state vectors/matrices (see definition below) that only need to be computed once at the beginning [tuple]
@@ -1755,7 +1755,7 @@ def lqg_forward_simulation(L, Kk, Kcal, Sigma_Ical, Sigma_ecal, Sigma_Icalecal,
     :param n: dimension of state vector [int]
     :param m: dimension of information vector [int]
     :param l: dimension of observation vector [int]
-    :param gamma: visual position noise weight (only used for E-LQG) [float]
+    :param gamma: position perception noise weight (only used for E-LQG) [float]
     :param saccade_times: array of indices that correspond to saccade times [see n_s in paper] (only used for E-LQG) [num_targets-array]
     :param Delta: observation time lag in time steps (experimental!; default: 0) [int]
     :param minimum_computations: if True, realized costs and other stuff are not computed and printed (useful in optimizations etc.) [bool]

@@ -61,10 +61,10 @@ There are mainly three use cases this library is designed for:
 - "sigma_c": constant (i.e., signal-independent) control noise level [LQG/E-LQG (not used in paper)]
 - "sigma_s": observation noise scaling parameter [LQG]
 - "sigma_H": proprioceptive position noise level (only used if "include_proprioceptive_endeffector_signals==True") [E-LQG (not used in paper)]
-- "sigma_Hdot": visual velocity noise level [E-LQG ("sigma_v" in paper)]
-- "sigma_frc": visual force noise level [E-LQG ("sigma_f" in paper)]
+- "sigma_Hdot": velocity perception noise level [E-LQG ("sigma_v" in paper)]
+- "sigma_frc": force perception noise level [E-LQG ("sigma_f" in paper)]
 - "sigma_e": gaze noise level [E-LQG]
-- "gamma": visual position noise weight [E-LQG]
+- "gamma": position perception noise weight [E-LQG]
 - "saccade_times": array of indices that correspond to saccade times; here, this should be [n_s,N] (avoid whitespaces between list entries in command line argument!), with n_s saccade time between initial position and target and N final time step index [E-LQG (see "n_s" in paper)]
 - "Delta": observation time lag in time steps (WARNING: experimental!) [LQG/E-LQG (not used in paper)]
 
